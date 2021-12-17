@@ -1,0 +1,109 @@
+\documentclass[10pt,landscape]{article}
+
+\usepackage{../common/cheat-style}
+\usepackage{url}
+\usepackage{hyperref}
+
+\begin{document}
+
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2em}
+
+\def\csRevision{r1}
+\def\csSubtitle{coq.8.14.0, 2021}
+\makeheader{The COQ Proof Assistant}
+
+\begin{multicols}{3}
+
+\vbox{
+  \subsection{Useful Links}
+Main site:  \url{https://coq.inria.fr/} \\
+Install:  \url{https://github.com/coq/platform}\\
+Sources:  \url{https://github.com/coq/coq}\\
+
+\subsection{Installing {\tt coq} with {\tt opam}}
+
+\begin{verbatim}
+opam init
+eval $(opam env)
+opam switch create with-coq 4.05.0
+opam pin add coq ${VERSION}
+opam install coqide
+opam repo add coq-released https://coq.inria.fr/opam/released
+opam install coq-sudoku
+\end{verbatim}
+
+\subsection{Commands}
+
+\begin{tabular}{ll}
+  {\tt Check }\emph{formula}{\tt .} & Check the type of a formula \\
+  {\tt Locate "\_ <= \_".} & Find defintion of identifier \\
+  {\tt Compute }\emph{expression}{\tt .} & Compute an expression \\
+  {\tt Definition }\emph{ident}{\tt := }\emph{exp}{\tt .} & Definition \\
+  {\tt Definition }\emph{f args}{\tt := }\emph{exp}{\tt .} & Function definition \\
+  {\tt Reset }\emph{ident}{\tt .} & Forget definition \\
+  {\tt Require Import }\emph{Library}{\tt .} & Import a library\\
+  {\tt SearchPattern }\emph{pattern}{\tt .} & Search for a pattern (type)\\
+  {\tt Search }\emph{patterns}{\tt .} & Search a combination of patterns\\
+  {\tt Print }\emph{ident}{\tt .} & Print more information on \emph{ident}\\
+  {\tt Fixpoint }\emph{f args}{\tt := }\emph{exp}{\tt .} & Recursive definition \\
+  & requires \emph{structural recursion}\\
+\end{tabular}
+
+\subsection{Expressions}
+\begin{tabular}{ll}
+  {\tt True}, {\tt False} & {\tt Prop} \\
+  {\tt 1} & {\tt nat} \\
+  {\tt 1,1} & {\tt nat * nat} \\
+  {\tt 1=1 /\ textbackslash{}1<=2} & {\tt Prop} \\
+  {\tt nat -> Prop} & {\tt Type} \\
+  {\tt fun x : nat => x = 3} & {\tt nat -> Prop}\\
+  {\tt forall x:nat, x<3 \textbackslash/ exists y:nat, x=y+3} & {\tt Prop}\\
+  {\tt let x := 1 in x+x} & {\tt nat}\\
+  {\tt A -> B -> C} & {\tt A} implies that ({\tt B} implies {\tt C})\\
+  {\tt if cond then e1 else e2} & Conditional \\
+  {\tt (match e with 0 => true} & Pattern-matching\\
+  {\tt | S p => false   end)} &\\
+\end{tabular}
+
+\subsection{Libraries}
+\begin{tabular}{ll}
+  {\tt Bool} & Booleans \\
+  {\tt Arith} & Natural Numbers: {\tt 0}, {\tt 1 = S 0}  \\
+  {\tt List} & Lists: {\tt nil}, {\tt 1::nil}, {\tt [1;2]}, {\tt map f l}, {\tt l++l} \\
+\end{tabular}
+}
+
+\vbox{
+  \subsection{BBB}
+}
+
+\vbox{
+  \subsection{CCC}
+}
+
+\end{multicols}
+
+\newpage
+
+\makeheader{The COQ Proof Assistant }
+
+\begin{multicols}{3}
+
+\vbox{
+  \subsection{AAA}
+}
+
+\vbox{
+  \subsection{AAA}
+}
+
+\vbox{
+  \subsection{AAA}
+}
+
+\end{multicols}
+
+\end{document}
