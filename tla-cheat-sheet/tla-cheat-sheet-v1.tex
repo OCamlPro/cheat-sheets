@@ -1,0 +1,126 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{../common/cheat-style}
+\usepackage{url}
+\usepackage{hyperref}
+
+\begin{document}
+
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2em}
+\def\csRevision{1}
+\def\csSubtitle{TLA}
+\makeheader{The TLA cheat-sheet}
+
+\newcommand{\expr}{\textit{expr}}
+\newcommand{\IN}{\textbf{$~\backslash$in}}
+\newcommand{\E}{$\backslash E$}
+\newcommand{\A}{$\backslash A$}
+
+\begin{multicols}{3}
+  \section{TLA Standard}
+  \vbox{
+    \subsection{Module format}
+    \begin{tabular}{l|p{0.14\textwidth}}
+      -{}-{}-{}- MODULE filename -{}-{}-{}- & Header of any module\\
+      \textbf{EXTENDS} mname & Adds the content of module to the current one\\
+      \textbf{CONSTANTS} c1, ... & Defines constant names for the module\\
+      \textbf{VARIABLES} v1, ... & Defines global variables for the module\\
+      M == \textbf{INSTANCE} mname & Creates a namespace for an imported module\\
+
+      %   INSTANCE ``m'' WITH var1 $\leftarrow$ var ... &|& Links variables/constants
+      %   of the current module and the imported one\\
+
+      vname $==$ \expr & defines a global value\\
+
+      fun(arg1, ...) $==$ \expr & Defines a global function\\
+
+      \textbf{RECURSIVE} fun(\_,...) & Declares the future definition of a recursive function\\
+
+      fun[x \IN~$S$] == \expr & Defines a function whose arguments belong
+      to a given set (may be recursive without declaring beforehand)\\
+
+      \textbf{LOCAL} name... & Defines a local value or function\\
+
+      \textbf{ASSUME} $P$ & Asserts $P$ as an assumption\\
+
+      $\backslash *$ & Starts a single-line comment\\
+
+      ==== & Footer of any module\\
+    \end{tabular}
+
+    \subsection{Generic expressions}
+
+    \begin{tabular}{l|p{0.13\textwidth}}
+      $TRUE$, $FALSE$ & Booleans\\
+      $\backslash$/, /$\backslash$, $\sim$ & Bool. operators \textit{or}, \textit{and}, \textit{not} \\
+      $<<val1, ...>>$ & Sequences/tuples\\
+      \null[field |-> \expr, ...] & Records \\
+      \null[r \textbf{EXCEPT} !.field1 = \expr, ...] & Record update \\
+      r.field & Record access\\
+      \null[x \IN~$S$ |-> \expr] & Functions \\
+      \null[f \textbf{EXCEPT} ![x] = \expr, ...] & Function update \\
+      f[x] & Function call\\
+      \{x1, x2, ...\} & Sets\\
+      \{\expr : x \IN~$S$\}& Mapping of set\\
+      \{x \IN~$S$ : p \}& Filtering of set\\
+      \textbf{DOMAIN} $f$ & Domain of the function/tuple/sequence $f$\\
+      \textbf{LET} v == \expr~\textbf{IN} ... & Local variable\\
+      \textbf{IF} \expr\\
+      \textbf{THEN} \expr\\
+      \textbf{ELSE} \expr & Conditional statement \\
+      Module\textbf{!}value & Use the value defined in a namespace\\
+      \textbf{CASE} $p_1$ -> $\expr_1$\\
+      \textbf{[]} $p_2$ -> $\expr_2$ ...\\
+      \textbf{OTHER} -> $\expr$ &
+      Selects an $\expr_i$ such that $p_i$ is $TRUE$, otherwise selects \expr\\
+    \end{tabular}
+  }
+
+  \vbox{
+  \subsection {Boolean Predicates}
+    \begin{tabular}{l|p{0.15\textwidth}}
+      \E~$x$ \IN~$S$: $p$ & Existential quantifier\\
+      \A~$x$ \IN~$S$: $p$ & Universal quantifier\\
+      \textbf{CHOOSE} x \IN~$S$: p & Selection in set\\
+    \end{tabular}
+
+  \subsection {Action Predicates}
+    \begin{tabular}{l|p{0.15\textwidth}}
+      $e'$ & The value of $e$ at the end of a step\\
+      $[A]_e$ & $A$ or $e' = e$\\
+      $<A>_e$ & $A$ and $e' \neq e$\\
+      $UNCHANGED e$ & $e$ did not change between steps\\
+      $ENABLED A$ & $A$ is possible
+    \end{tabular}
+
+  \subsection {Temporal Predicates}
+    \begin{tabular}{l|p{0.15\textwidth}}
+      []$p$ & Always $p$\\
+      <>$p$ & Eventually $p$\\
+      $p \sim q$ & $p$ leads to $q$\\
+      $WF_e(A)$ & Weak Fairness for action $A$\\
+      $SF_e(A)$ & Strong Fairness for action $A$\\
+    \end{tabular}
+  }
+
+
+\end{multicols}
+
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
+
+  
+  \vbox{
+    \subsection{More...}
+  }
+  
+  \vbox{
+    \subsection{Even more..}
+
+  }
