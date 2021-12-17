@@ -1,0 +1,92 @@
+\documentclass[10pt,landscape]{article}
+
+\usepackage{../common/cheat-style}
+\usepackage{url}
+\usepackage{hyperref}
+
+\begin{document}
+
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2em}
+
+\def\csRevision{1}
+\def\csSubtitle{edition 2021}
+\makeheader{The RUST Language}
+
+\begin{multicols}{3}
+
+\vbox{
+  \subsection{Useful Links}
+Language:  \url{https://www.rust-lang.org/} \\
+Install:  \url{https://rustup.rs}\\
+Packages:  \url{https://crates.io}\\
+Package Docs: \url{https://docs.rs}\\  
+\subsection{Hello World}
+
+File \verb+src/main.rs+:\\
+\begin{verbatim}
+pub fn main() -> Res<()> {
+  println!("Hello {} !", "World");
+  Ok( () )
+}
+\end{verbatim}
+
+File \verb+Cargo.toml+:\\
+\begin{verbatim}
+[package]
+edition = "2018"
+name = "hello_world"
+version = "1.0.0"
+[[bin]]                # only for an executable 
+name = "my-hello-world"
+path = "src/main.rs"
+[dependencies]
+gitdep = { git = "https://...", tag = '1.10.11' }
+failure = "0.1.7" # on crates.io
+concur = { path = "../path-to-source" }
+[patch.crates-io]      # for modified dependencies
+failure = { path = "../my-own-version" }
+\end{verbatim}
+
+\begin{tabular}{ll}
+  {\tt cargo build} & Build the project \\
+  {\tt cargo update} & Update {\tt Cargo.lock} file \\
+  \verb+cargo doc --open+ & Build documentation \\
+\end{tabular}
+
+\subsection{AAA}
+}
+
+\vbox{
+  \subsection{BBB}
+}
+
+\vbox{
+  \subsection{CCC}
+}
+
+\end{multicols}
+
+\newpage
+
+\makeheader{The RUST Language }
+
+\begin{multicols}{3}
+
+\vbox{
+  \subsection{AAA}
+}
+
+\vbox{
+  \subsection{AAA}
+}
+
+\vbox{
+  \subsection{AAA}
+}
+
+\end{multicols}
+
+\end{document}
