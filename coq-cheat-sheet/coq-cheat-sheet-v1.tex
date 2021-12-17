@@ -1,0 +1,190 @@
+\documentclass[10pt,landscape]{article}
+
+\usepackage{../common/cheat-style}
+\usepackage{url}
+\usepackage{hyperref}
+
+\begin{document}
+
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2em}
+
+\def\csRevision{r1}
+\def\csSubtitle{coq.8.14.0, 2021}
+\makeheader{The COQ Proof Assistant}
+
+\begin{multicols}{3}
+
+\vbox{
+  \subsection{Useful Links}
+Main site:  \url{https://coq.inria.fr/} \\
+Install:  \url{https://github.com/coq/platform}\\
+Sources:  \url{https://github.com/coq/coq}\\
+
+
+\subsection{Installing {\tt coq} with {\tt opam}}
+
+\begin{verbatim}
+opam init
+eval $(opam env)
+opam switch create with-coq 4.05.0
+opam pin add coq ${VERSION}
+opam install coqide
+opam repo add coq-released https://coq.inria.fr/opam/released
+opam install coq-sudoku
+\end{verbatim}
+
+\subsection{Executables}
+
+\begin{tabular}{ll}
+  {\tt coqc -{}-help} & Coq compiler \\
+  {\tt coqtop -{}-help} & Coq toplevel \\
+  {\tt coqide -{}-help} & Coq IDE \\
+\end{tabular}
+
+
+\subsection{Vernacular Commands}
+
+\begin{tabular}{ll}
+  {\tt Check }\emph{expression}{\tt .} & Check the type of expression \\
+  {\tt Locate "\_ <= \_".} & Find defintion of identifier \\
+  {\tt Compute }\emph{expression}{\tt .} & Compute an expression \\
+  {\tt Definition }\emph{ident}{\tt := }\emph{exp}{\tt .} & Definition \\
+  {\tt Definition }\emph{f args}{\tt := }\emph{exp}{\tt .} & Function definition \\
+  {\tt Reset }\emph{ident}{\tt .} & Forget definition \\
+  {\tt Require Import }\emph{Library}{\tt .} & Import a library\\
+  {\tt SearchPattern }\emph{pattern}{\tt .} & Search for a pattern (type)\\
+  {\tt Search }\emph{patterns}{\tt .} & Search a combination of patterns\\
+  {\tt Search (\_ <= \_) (\_ + \_).} & Search example\\
+  {\tt Print }\emph{ident}{\tt .} & Print more information on \emph{ident}\\
+  {\tt Fixpoint }\emph{f args}{\tt := }\emph{exp}{\tt .} & Recursive definition \\
+  & requires \emph{structural recursion}\\
+  {\tt Theorem }\emph{ident }{\tt : }\emph{exp}{\tt .} & Theorem definition \\
+  {\tt Lemma }\emph{ident }{\tt : }\emph{exp}{\tt .} & Lemma definition \\
+\end{tabular}
+
+\subsection{Expressions}
+\hspace{-2em}
+\begin{tabular}{ll}
+  {\tt True}, {\tt False} & {\tt Prop} \\
+  {\tt 1} & {\tt nat} \\
+  {\tt 1,1} & {\tt nat * nat} \\
+  {\tt 1=1 /\ textbackslash{}1<=2} & {\tt Prop} \\
+  {\tt nat -> Prop} & {\tt Type} \\
+  {\tt forall A: Prop, \textasciitilde{}A} & {\tt Prop}\\
+  {\tt fun x : nat => x = 3} & {\tt nat -> Prop}\\
+  {\tt forall x:nat, x<3 \textbackslash/ exists y:nat, x=y+3} & {\tt Prop}\\
+  {\tt let x := 1 in x+x} & {\tt nat}\\
+  {\tt A -> B -> C} & {\tt A} implies ({\tt B} implies {\tt C})\\
+  {\tt if cond then e1 else e2} & Conditional \\
+  {\tt (match e with 0 => true} & Pattern-matching\\
+  {\tt | S p => false   end)} &\\
+\end{tabular}
+
+}
+
+\vbox{
+\subsection{Libraries}
+\begin{tabular}{ll}
+  {\tt Bool} & Booleans \\
+  {\tt Arith} & Natural Numbers: {\tt 0}, {\tt 1 = S 0}  \\
+  {\tt List} & Lists: {\tt nil}, {\tt 1::nil}, {\tt [1;2]}, {\tt map f l}, {\tt l++l} \\
+  {\tt Omega} & Provide tactic {\tt omega}\\
+  {\tt ArithRing} & Provide tactic {\tt ring}\\
+  {\tt ZArith} & Integer Numbers\\
+\end{tabular}
+
+\subsection{Tactics Table}
+
+\begin{tabular}{|l|l|l|} \hline
+  & Hypothesis {\tt H} & Conclusion \\ \hline
+  $\Rightarrow{}$ & {\tt apply H }[{\tt with x:=E}] & {\tt intros H} \\ \hline
+  $\neg{}$ &  {\tt elim H} & {\tt intros H} \\
+  &  {\tt case H} & \\ \hline
+  {\tt False} &  {\tt elim H} & {\tt intros H} \\
+  &  {\tt case H} & \\ \hline
+  $\forall{}$ &  {\tt apply H} & {\tt intros H} \\ \hline
+  $\exists{}$ &  {\tt elim H} & {\tt exists }\emph{v} \\
+  &  {\tt case H} & \\ 
+  &  {\tt destruct H as [x H1]} & \\ \hline
+  $\wedge{}$ &  {\tt elim H} & {\tt split} \\
+  &  {\tt case H} & \\ 
+  &  {\tt destruct H as [H1 H2]} & \\ \hline
+  $\vee{}$ &  {\tt elim H} & {\tt left} \\
+  &  {\tt case H} & {\tt right} \\ 
+  &  {\tt destruct H as [H1 | H2]} & \\ \hline
+  {\tt =} &  {\tt rewrite H }[{\tt with x:=E}] & {\tt reflexivity} \\
+  &  {\tt rewrite <- H }[{\tt with x:=E}] & {\tt ring} \\ \hline
+\end{tabular}
+
+\subsection{New Datatypes}
+\begin{verbatim}
+Inductive bin : Type :=
+  L : bin
+| N : bin -> bin -> bin.
+\end{verbatim}
+}
+
+\vbox{
+
+  \subsection{Tactics}
+\noindent
+\begin{tabular}{p{2.7cm}l}
+  {\tt assumption} & Search goal in assumptions \\
+  {\tt intuition, tauto} & Auto use of conj, disj and neg\\
+  {\tt firstorder} & {\tt tauto} with exist and forall\\
+  {\tt Qed} & Proof finished, to be saved\\
+  {\tt t1;t2} & Use {\tt t1}, then {\tt t2}\\
+  {\tt apply le\_trans with (m:=1)} & Apply, with free-var subst \\
+  {\tt unfold }\emph{ident} & Substitute with definition\\
+  {\tt assert (H : P) } & introduce hypoth. {\tt H} as {\tt P}\\
+  {\tt auto, eauto} & Use user-provided theorems\\
+  {\tt ring} & equalities, add and mult\\
+  {\tt omega} & linear inequations \\
+  {\tt induction n} & induction on a natural number \\
+  {\tt simpl} & substitute recursive call \\
+  {\tt discriminate} & remove self-contradictory goals\\
+  {\tt injection H} & instantiate {\tt H} before goal \\
+  {\tt rewrite H} & Use left-to-right rewrite of equality \\
+  {\tt rewrite <- H} & Use right-to-left rewrite of equality \\
+  {\tt case H} & Split between {\tt H} and {\tt \textasciitilde{}H}\\
+  {\tt exact H} & ?\\
+  {\tt inversion H} & ?\\
+\end{tabular}
+
+\begin{tabular}{|p{6.2cm}|}\hline
+{\tt Theroem t1: forall x1 ... xk, A1 x1 ... xk -> A2 x1 ... xk -> ... ->
+  C x1 ... xk }\\ \hline
+{\tt ================}\\
+{\tt C a1 ... ak}\\ \hline
+use: {\tt apply t1}\\ \hline
+{\tt ================}\\
+{\tt A1 a1 ... ak, ..., An a1 ... ak}\\ \hline
+\end{tabular}
+}
+
+\end{multicols}
+
+\newpage
+
+\makeheader{The COQ Proof Assistant }
+
+\begin{multicols}{3}
+
+\vbox{
+  \subsection{AAA}
+}
+
+\vbox{
+  \subsection{AAA}
+}
+
+\vbox{
+  \subsection{AAA}
+}
+
+\end{multicols}
+
+\end{document}
