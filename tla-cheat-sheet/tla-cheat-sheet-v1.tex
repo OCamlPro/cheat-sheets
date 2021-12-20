@@ -151,8 +151,6 @@
   }
 
   \vbox{
-
-    
     \subsection{Naturals, Integers}
     
     \begin{tabular}{p{0.15\textwidth}|p{0.14\textwidth}}
@@ -212,10 +210,137 @@
     \end{tabular}
     $\null^*$ file name must be absolute
   }
-  
-
 \end{multicols}
 
+\clearpage
+
+\makeheader{The TLA cheat-sheet}
+\section{Creating a model}
+\begin{multicols}{3}
+  \vbox{
+    \subsection{Counter.tla}
+    \begin{verbatim}
+Implements a simple counter
+
+---- MODULE Counter ----
+
+EXTENDS Naturals
+
+\* An unknown constant
+CONSTANTS MAX
+
+\* The variables of our model
+VARIABLES counter, reset
+
+\* The initial state (must be finite)
+Init == 
+  /\ counter \in 0..MAX
+  /\ reset \in {TRUE, FALSE}
+
+\* If `reset' is set, then counter is reinitialized
+Incr ==
+  /\ ~reset
+  /\ reset' \in {TRUE, FALSE}
+  /\ counter' = counter + 1
+
+\* If `reset' is set, then counter is reinitialized
+Reset ==
+  /\ reset
+  /\ reset' \in {TRUE, FALSE}
+  /\ counter' = 0
+
+
+\* The Next state predicate
+Next ==
+  \/ Incr
+  \/ Reset
+
+\* The specification of our  model:
+\*   - starts by Init
+\*   - Next is the next state predicate, but variables
+\      are allowed not to change between steps
+Spec == 
+  /\ Init
+  /\ [][Next]_<<counter, reset>>
+====
+    \end{verbatim}
+  }
+\vbox{
+  \subsection{Props.tla}
+  \begin{verbatim}
+Properties on the counter model
+---- MODULE Props ----
+
+CONSTANT MAX
+
+VARIABLES counter, reset
+
+LOCAL INSTANCE Counter WITH
+  MAX <- MAX,
+  counter <- counter,
+  reset <- reset
+
+
+\* Invariants
+
+\* Variable `counter' is always positive
+AlwaysPositive == counter >= 0
+
+\* Temporal Properties
+
+\* If `reset' happens, then `counter' will be 0
+ResetLeadsToZero ==
+    reset ~> counter = 0
+
+\* Either:
+\*   in the future, `reset' will never be triggered;
+\*   or `counter' repeatedely reaches 0.
+CounterRuns ==
+  \/ <>[](~reset)
+  \/ []<>(counter = 0)
+====
+    \end{verbatim}
+  \subsection{Props.cfg}
+  \begin{verbatim}
+CONSTANT
+  MAX = 0
+
+SPECIFICATION
+  Spec
+
+INVARIANTS
+  AlwaysPositive
+
+PROPERTIES
+  ResetLeadsToZero
+  CounterRuns
+  \end{verbatim}
+  }
+
+  \vbox{
+    \subsection{Output}
+
+    \begin{verbatim}
+Temporal properties were violated.
+The following behavior constitutes a counter-example:
+1: <Initial predicate>
+/\ counter = 0
+/\ reset = FALSE
+2: <Action line 7, col 1 to line 10, col 16 of module Props>
+/\ counter = 1
+/\ reset = FALSE
+3: <Action line 7, col 1 to line 10, col 16 of module Props>
+/\ counter = 2
+/\ reset = FALSE
+4: <Action line 7, col 1 to line 10, col 16 of module Props>
+/\ counter = 3
+/\ reset = TRUE
+5: Stuttering
+    \end{verbatim}
+}
+
+
+\end{multicols}
 \end{document}
 
 %%% Local Variables:
