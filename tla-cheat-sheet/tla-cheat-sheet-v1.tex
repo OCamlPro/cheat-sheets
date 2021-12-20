@@ -62,7 +62,7 @@
 
     \begin{tabular}{p{0.15\textwidth}|p{0.14\textwidth}}
       $TRUE$, $FALSE$ & Booleans\\
-      $\backslash$/, /$\backslash$, $\sim$ & Bool. operators \textit{or}, \textit{and}, \textit{not} \\
+      $\backslash$/, /$\backslash$, $\sim$ & Boolean operators \textit{or}, \textit{and}, \textit{not} \\
       $<<val1, ...>>$ & Sequences/tuples\\
       \null[field |-> \expr, ...] & Records \\
       \null[r \textbf{EXCEPT} !.field1 = \expr, ...] & Record update \\
@@ -128,7 +128,7 @@
       $\textbf{Head}(s)$ & First element of a sequence\\
       $\textbf{Tail}(s)$ & The sequence without its head\\
       $\textbf{Append}(s, i)$ & Adds $i$ at the end of sequence $s$\\
-      $\backslash o$ & Concatenation \\
+      $s_1~\backslash o~s_2$ & Concatenation \\
       $\textbf{Len}(s)$ & Length of a sequence \\
       $\textbf{Seq}(S)$ & Sequences of elements of set $S$\\
     \end{tabular}
@@ -154,6 +154,7 @@
     \subsection{Naturals, Integers}
     
     \begin{tabular}{p{0.15\textwidth}|p{0.14\textwidth}}
+      $\textbf{Nat}$, $\textbf{Int}^*$ & Sets of numbers\\
       $+$, $-^*$, $*$, $\DIV$ & Arithmetical operators\\
       $x ^ y$ & $x$ to the $y$\\
       $<$, $>$, $\LEQ$, $\GEQ$ & Comparison operators\\
@@ -184,6 +185,9 @@
     \subsection{Bags}
     A bag is a set that can contain multiple (finite) copies of the same
     element.
+
+    ~
+    
     \begin{tabular}{p{0.15\textwidth}|p{0.14\textwidth}}
       $\textbf{EmptyBag}$ & The empty bag \\
       $\textbf{IsABag}(B)$ & Checks if $B$ is a bag\\
@@ -191,8 +195,8 @@
       $\textbf{SetToBag}(S)$ & The bag of set elements\\
       $\textbf{BagIn}(B,e)$ & Checks if $e$ is in the bag\\
       $(+)$, $(-)$ & Union, disjunction\\
-      $BagUnion(S_B)$ & Union of set of bags\\
-      $B1 \SQSUBSETEQ B2$ & Subset\\
+      $\textbf{BagUnion}(S_B)$ & Union of set of bags\\
+      $B1 \SQSUBSETEQ~B2$ & Subset\\
       $\textbf{SubBag}(B)$ & Set of all sub-bags\\
       $\textbf{BagOfAll}(F(\_), B)$ & Mapping on bags\\
       $\textbf{BagCardinality}(B)$ & Size of a bag\\
