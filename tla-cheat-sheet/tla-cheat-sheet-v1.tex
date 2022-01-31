@@ -1,0 +1,363 @@
+\documentclass[10pt,landscape]{article}
+\usepackage{../common/cheat-style}
+\usepackage{url}
+\usepackage{hyperref}
+
+\begin{document}
+
+\setlength{\premulticols}{1pt}
+\setlength{\postmulticols}{1pt}
+\setlength{\multicolsep}{1pt}
+\setlength{\columnsep}{2em}
+\def\csRevision{1}
+\def\csSubtitle{TLA}
+\makeheader{The TLA cheat-sheet}
+
+\newcommand{\expr}{\textit{expr}}
+\newcommand{\IN}{\textbf{$~\backslash$in}}
+\newcommand{\NOTIN}{\textbf{$~\backslash$notin}}
+\newcommand{\SUBSETEQ}{\textbf{$~\backslash$subseteq}}
+\newcommand{\SQSUBSETEQ}{\textbf{$~\backslash$sqsubseteq}}
+\newcommand{\UNION}{\textbf{$~\backslash$union}}
+\newcommand{\INTER}{\textbf{$~\backslash$intersect}}
+\newcommand{\DIV}{\textbf{$~\backslash$div}}
+\newcommand{\LEQ}{\textbf{$~\backslash$leq}}
+\newcommand{\GEQ}{\textbf{$~\backslash$geq}}
+\newcommand{\E}{$\backslash E$}
+\newcommand{\A}{$\backslash A$}
+
+\begin{multicols}{3}
+  \section{TLA Standard}
+  \vbox{
+    \subsection{Module format}
+    \begin{tabular}{p{0.15\textwidth}|p{0.14\textwidth}}
+      -{}-{}-{}- MODULE filename -{}-{}-{}- & Header of any module\\
+      \textbf{EXTENDS} mname & Adds the content of module to the current one\\
+      \textbf{CONSTANTS} c1, ... & Defines constant names for the module\\
+      \textbf{VARIABLES} v1, ... & Defines global variables for the module\\
+      M == \textbf{INSTANCE} mname & Creates a namespace for an imported module\\
+
+      %   INSTANCE ``m'' WITH var1 $\leftarrow$ var ... &|& Links variables/constants
+      %   of the current module and the imported one\\
+
+      vname $==$ \expr & defines a global value\\
+
+      fun(arg1, ...) $==$ \expr & Defines a global function\\
+
+      \textbf{RECURSIVE} fun(\_,...) & Declares the future definition of a recursive function\\
+
+      fun[x \IN~$S$] == \expr & Defines a function whose arguments belong
+      to a given set (may be recursive without declaring beforehand)\\
+
+      \textbf{LOCAL} name... & Defines a local value or function\\
+
+      \textbf{ASSUME} $P$ & Asserts $P$ as an assumption\\
+
+      $\backslash *$ & Starts a single-line comment\\
+
+      ==== & Footer of any module\\
+    \end{tabular}
+
+    \subsection{Generic expressions}
+
+    \begin{tabular}{p{0.15\textwidth}|p{0.14\textwidth}}
+      $TRUE$, $FALSE$ & Booleans\\
+      $\backslash$/, /$\backslash$, $\sim$ & Boolean operators \textit{or}, \textit{and}, \textit{not} \\
+      $<<val1, ...>>$ & Sequences/tuples\\
+      \null[field |-> \expr, ...] & Records \\
+      \null[r \textbf{EXCEPT} !.field1 = \expr, ...] & Record update \\
+      r.field & Record access\\
+      \null[x\IN~$S$ |-> \expr] & Functions \\
+      \null[f \textbf{EXCEPT} ![x] = \expr, ...] & Function update \\
+      f[x] & Function call\\
+      \{x1, x2, ...\} & Sets\\
+      \{\expr : x\IN~$S$\}& Mapping of set\\
+      \{x\IN~$S$ : p \}& Filtering of set\\
+      \textbf{DOMAIN} $f$ & Domain of the function/tuple/sequence $f$\\
+      \textbf{LET} v == \expr~\textbf{IN} ... & Local variable\\
+      \textbf{IF} \expr\\
+      \textbf{THEN} \expr\\
+      \textbf{ELSE} \expr & Conditional statement \\
+    \end{tabular}
+  }
+
+  \vbox{
+    \begin{tabular}{p{0.15\textwidth}|p{0.14\textwidth}}
+      Module\textbf{!}value & Use the value defined in a namespace\\
+      \textbf{CASE} $p_1$ -> $\expr_1$\\
+      \textbf{[]} $p_2$ -> $\expr_2$ ...\\
+      \textbf{OTHER} -> $\expr$ &
+      Selects an $\expr_i$ such that $p_i$ is $TRUE$, otherwise selects \expr\\
+    \end{tabular}
+
+  \subsection {Boolean Predicates}
+    \begin{tabular}{p{0.15\textwidth}|p{0.14\textwidth}}
+      \E~$x$\IN~$S$: $p$ & Existential quantifier\\
+      \A~$x$\IN~$S$: $p$ & Universal quantifier\\
+      \textbf{CHOOSE} x\IN~$S$: p & Selection in set\\
+      $p => q$ & Implication\\
+      $p <=> q$ & Equivalence 
+    \end{tabular}
+
+  \subsection {Action Predicates}
+    \begin{tabular}{p{0.15\textwidth}|p{0.14\textwidth}}
+      $e'$ & The value of $e$ after a step\\
+      $[A]_e$ & $A$ or $e' = e$\\
+      $<A>_e$ & $A$ and $e' \neq e$\\
+      $\textbf{UNCHANGED}~e$  & $e$ did not change\\
+      $\textbf{ENABLED}~A$ & $A$ is possible
+    \end{tabular}
+
+  \subsection {Temporal Predicates}
+    \begin{tabular}{p{0.15\textwidth}|p{0.14\textwidth}}
+      []~$p$ & Always $p$\\
+      <>~$p$ & Eventually $p$\\
+      $p \sim> q$ & $p$ leads to $q$\\
+      $\textbf{WF}_e(A)$ & Weak Fairness for action $A$\\
+      $\textbf{SF}_e(A)$ & Strong Fairness for action $A$\\
+    \end{tabular}
+    
+    \section{Useful modules}
+
+    \subsection{Sequences}
+ 
+    \textbf{Sequences are $1$-indexed}
+    
+    \begin{tabular}{p{0.15\textwidth}|p{0.14\textwidth}}
+      $s[i]$ & $i^{th}$ element of the sequence\\ 
+      $\textbf{Head}(s)$ & First element of a sequence\\
+      $\textbf{Tail}(s)$ & The sequence without its head\\
+      $\textbf{Append}(s, i)$ & Adds $i$ at the end of sequence $s$\\
+      $s_1~\backslash o~s_2$ & Concatenation \\
+      $\textbf{Len}(s)$ & Length of a sequence \\
+      $\textbf{Seq}(S)$ & Sequences of elements of set $S$\\
+    \end{tabular}
+
+    \subsection{FiniteSets}
+    
+    \begin{tabular}{p{0.15\textwidth}|p{0.14\textwidth}}
+      $x \IN~S$ & $x$ is in set $S$\\
+      $x \NOTIN~S$ & $x$ is not in set $S$\\
+      $S \SUBSETEQ~T$ & $S$ is a subset of $T$\\
+      $S \UNION~T$ & Union of sets\\
+      $S \INTER~T$ & Intersection of sets\\
+      $S~\backslash~T$ & $S$ without elements of $T$\\
+      $\textbf{SUBSET}~S$ & All the subsets of $S$\\
+      $\textbf{UNION}~S$ & Flatten sets of sets\\
+      $\textbf{IsFiniteSet}(S)$ & $TRUE$ if $S$ if finite\\
+      $\textbf{Cardinality}(S)$ & Number of elements of $S$
+    \end{tabular}
+
+  }
+
+  \vbox{
+    \subsection{Naturals, Integers}
+    
+    \begin{tabular}{p{0.15\textwidth}|p{0.14\textwidth}}
+      $\textbf{Nat}$, $\textbf{Int}^*$ & Sets of numbers\\
+      $+$, $-^*$, $*$, $\DIV$ & Arithmetical operators\\
+      $x ^ y$ & $x$ to the $y$\\
+      $<$, $>$, $\LEQ$, $\GEQ$ & Comparison operators\\
+      $\%$ & Modulo\\
+      $ x .. y $ & $\{x, x+1, ..., y\}$
+    \end{tabular}
+    $\null^*$ only available in the Integer module
+    
+    \subsection{Reals}
+    
+    \begin{tabular}{p{0.15\textwidth}|p{0.14\textwidth}}
+      $\textbf{Real}$ & Set of reals\\
+      $/$ & Real division\\
+      $\textbf{Infinity}$ & Value greater than any real (NOT A REAL)
+    \end{tabular}
+
+    \subsection{TLC}
+    \begin{tabular}{p{0.15\textwidth}|p{0.14\textwidth}}
+      $\textbf{Print}(msg,~val)$ & Prints $msg$, then returns $val$\\
+      $\textbf{Print}(msg)$ & $\textbf{Print}(msg, TRUE)$\\
+      $\textbf{Assert}(val, out)$ & Prints $out$ and fails iff $val$ is $FALSE$\\
+      $d~\textbf{:>}~e$ & $f(d) = e$\\
+      $f~\textbf{@@}~g$ & Union of functions\\
+      $\textbf{SortSeq}(s, Op(\_,\_))$ & Sorts a sequence\\
+      $\textbf{ToString}(v)$ & String representation of $v$\\
+      $\textbf{TLCEval}(v)$ & Forces evaluation of $v$ 
+    \end{tabular}
+    \subsection{Bags}
+    A bag is a set that can contain multiple (finite) copies of the same
+    element.
+
+    ~
+    
+    \begin{tabular}{p{0.15\textwidth}|p{0.14\textwidth}}
+      $\textbf{EmptyBag}$ & The empty bag \\
+      $\textbf{IsABag}(B)$ & Checks if $B$ is a bag\\
+      $\textbf{BagToSet}(B)$ & The set of bag elements\\
+      $\textbf{SetToBag}(S)$ & The bag of set elements\\
+      $\textbf{BagIn}(B,e)$ & Checks if $e$ is in the bag\\
+      $(+)$, $(-)$ & Union, disjunction\\
+      $\textbf{BagUnion}(S_B)$ & Union of set of bags\\
+      $B1 \SQSUBSETEQ~B2$ & Subset\\
+      $\textbf{SubBag}(B)$ & Set of all sub-bags\\
+      $\textbf{BagOfAll}(F(\_), B)$ & Mapping on bags\\
+      $\textbf{BagCardinality}(B)$ & Size of a bag\\
+      $\textbf{CopiesIn}(e, B)$ & Number of $e$ in the bag $B$
+    \end{tabular}
+    \subsection{Json}
+    \begin{tabular}{p{0.15\textwidth}|p{0.14\textwidth}}
+      $\textbf{ToJson}(v)$ & Returns $v$ as a Json string\\
+      $\textbf{ToJsonArray}(v)$ & Same, but for a sequence\\
+      $\textbf{ToJsonObject}(v)$ & Returns a Json object\\
+      $\textbf{JsonSerialize}(file^*, v)$ & Writes $v$ as a (plain) Json in $file$\\
+      $\textbf{ndJsonSerialize}(file^*, v)$ & Same, but Json is newline delimited\\
+      $\textbf{JsonSerialize}(file^*)$ & Returns the content of $file$\\
+      $\textbf{ndsonSerialize}(file^*)$ & Same, but values must be newline delimited\\
+    \end{tabular}
+    $\null^*$ file name must be absolute
+  }
+\end{multicols}
+
+\clearpage
+
+\makeheader{The TLA cheat-sheet}
+\section{Creating a model}
+\begin{multicols}{3}
+  \vbox{
+    \subsection{Counter.tla}
+    \begin{verbatim}
+Implements a simple counter
+
+---- MODULE Counter ----
+
+EXTENDS Naturals
+
+\* An unknown constant
+CONSTANTS MAX
+
+\* The variables of our model
+VARIABLES counter, reset
+
+\* The initial state (must be finite)
+Init == 
+  /\ counter \in 0..MAX
+  /\ reset \in {TRUE, FALSE}
+
+\* If `reset' is set, then counter is reinitialized
+Incr ==
+  /\ ~reset
+  /\ reset' \in {TRUE, FALSE}
+  /\ counter' = counter + 1
+
+\* If `reset' is set, then counter is reinitialized
+Reset ==
+  /\ reset
+  /\ reset' \in {TRUE, FALSE}
+  /\ counter' = 0
+
+
+\* The Next state predicate
+Next ==
+  \/ Incr
+  \/ Reset
+
+\* The specification of our  model:
+\*   - starts by Init
+\*   - Next is the next state predicate, but variables
+\      are allowed not to change between steps
+Spec == 
+  /\ Init
+  /\ [][Next]_<<counter, reset>>
+====
+    \end{verbatim}
+  }
+\vbox{
+  \subsection{Props.tla}
+  \begin{verbatim}
+Properties on the counter model
+---- MODULE Props ----
+
+CONSTANT MAX
+
+VARIABLES counter, reset
+
+LOCAL INSTANCE Counter WITH
+  MAX <- MAX,
+  counter <- counter,
+  reset <- reset
+
+
+\* Invariants
+
+\* Variable `counter' is always positive
+AlwaysPositive == counter >= 0
+
+\* Temporal Properties
+
+\* If `reset' happens, then `counter' will be 0
+ResetLeadsToZero ==
+    reset ~> counter = 0
+
+\* Either:
+\*   in the future, `reset' will never be triggered;
+\*   or `counter' repeatedely reaches 0.
+CounterRuns ==
+  \/ <>[](~reset)
+  \/ []<>(counter = 0)
+====
+    \end{verbatim}
+  \subsection{Props.cfg}
+  \begin{verbatim}
+CONSTANT
+  MAX = 0
+
+SPECIFICATION
+  Spec
+
+INVARIANTS
+  AlwaysPositive
+
+PROPERTIES
+  ResetLeadsToZero
+  CounterRuns
+  \end{verbatim}
+  }
+
+  \vbox{
+    \subsection{Output}
+
+    \begin{verbatim}
+Temporal properties were violated.
+The following behavior constitutes a counter-example:
+1: <Initial predicate>
+/\ counter = 0
+/\ reset = FALSE
+2: <Action line 7, col 1 to line 10, col 16 of module Props>
+/\ counter = 1
+/\ reset = FALSE
+3: <Action line 7, col 1 to line 10, col 16 of module Props>
+/\ counter = 2
+/\ reset = FALSE
+4: <Action line 7, col 1 to line 10, col 16 of module Props>
+/\ counter = 3
+/\ reset = TRUE
+5: Stuttering
+    \end{verbatim}
+}
+
+
+\end{multicols}
+\end{document}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: t
+%%% End:
+
+  
+  \vbox{
+    \subsection{More...}
+  }
+  
+  \vbox{
+    \subsection{Even more..}
+
+  }
