@@ -2,6 +2,10 @@
 \usepackage{../common/cheat-style}
 \usepackage{url}
 \usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\input{tla_listing}
 
 \begin{document}
 
@@ -223,7 +227,7 @@
 \begin{multicols}{3}
   \vbox{
     \subsection{Counter.tla}
-    \begin{verbatim}
+    \begin{lstlisting}[language=TLA]
 Implements a simple counter
 
 ---- MODULE Counter ----
@@ -241,13 +245,15 @@ Init ==
   /\ counter \in 0..MAX
   /\ reset \in {TRUE, FALSE}
 
-\* If `reset' is set, then counter is reinitialized
+\* If `reset' is set, then counter is
+\* reinitialized
 Incr ==
   /\ ~reset
   /\ reset' \in {TRUE, FALSE}
   /\ counter' = counter + 1
 
-\* If `reset' is set, then counter is reinitialized
+\* If `reset' is set, then counter is
+reinitialized
 Reset ==
   /\ reset
   /\ reset' \in {TRUE, FALSE}
@@ -261,17 +267,18 @@ Next ==
 
 \* The specification of our  model:
 \*   - starts by Init
-\*   - Next is the next state predicate, but variables
-\      are allowed not to change between steps
-Spec == 
+\*   - Next is the next state predicate, but
+\*     variables are allowed not to change
+\*     between steps
+Spec ==
   /\ Init
   /\ [][Next]_<<counter, reset>>
 ====
-    \end{verbatim}
+    \end{lstlisting}
   }
 \vbox{
   \subsection{Props.tla}
-  \begin{verbatim}
+  \begin{lstlisting}[language=TLA]
 Properties on the counter model
 ---- MODULE Props ----
 
@@ -292,20 +299,22 @@ AlwaysPositive == counter >= 0
 
 \* Temporal Properties
 
-\* If `reset' happens, then `counter' will be 0
+\* If `reset' happens, then `counter' will
+\* be 0
 ResetLeadsToZero ==
     reset ~> counter = 0
 
 \* Either:
-\*   in the future, `reset' will never be triggered;
+\*   in the future, `reset' will never be
+\*     triggered;
 \*   or `counter' repeatedely reaches 0.
 CounterRuns ==
   \/ <>[](~reset)
   \/ []<>(counter = 0)
 ====
-    \end{verbatim}
+    \end{lstlisting}
   \subsection{Props.cfg}
-  \begin{verbatim}
+  \begin{lstlisting}[language=TLA]
 CONSTANT
   MAX = 0
 
@@ -318,29 +327,33 @@ INVARIANTS
 PROPERTIES
   ResetLeadsToZero
   CounterRuns
-  \end{verbatim}
+  \end{lstlisting}
   }
 
   \vbox{
     \subsection{Output}
 
-    \begin{verbatim}
+    \begin{lstlisting}[language=TLA]
 Temporal properties were violated.
-The following behavior constitutes a counter-example:
+The following behavior constitutes a
+counter-example:
 1: <Initial predicate>
 /\ counter = 0
 /\ reset = FALSE
-2: <Action line 7, col 1 to line 10, col 16 of module Props>
+2: <Action line 7, col 1 to line 10, col 16 of
+module Props>
 /\ counter = 1
 /\ reset = FALSE
-3: <Action line 7, col 1 to line 10, col 16 of module Props>
+3: <Action line 7, col 1 to line 10, col 16 of
+module Props>
 /\ counter = 2
 /\ reset = FALSE
-4: <Action line 7, col 1 to line 10, col 16 of module Props>
+4: <Action line 7, col 1 to line 10, col 16 of
+module Props>
 /\ counter = 3
 /\ reset = TRUE
 5: Stuttering
-    \end{verbatim}
+    \end{lstlisting}
 }
 
 

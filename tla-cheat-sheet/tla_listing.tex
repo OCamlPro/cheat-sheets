@@ -1,0 +1,32 @@
+\lstdefinelanguage{TLA}{
+    keywords =[1] {
+        VARIABLES, CONSTANTS, EXTENDS, SPECIFICATION, INVARIANTS,
+        begin, end, algorithm, macro, define,
+        variables, variable, do,
+    },
+    otherkeywords = { ==, ----, ==== },
+    keywordstyle =[1] \color{blue},
+    keywords =[2] {
+        IF, THEN, ELSE, if, then, else, while, with,
+    },
+    keywordstyle =[2] \color{orange},
+    keywords =[3] {
+        TRUE, FALSE,
+    },
+    keywordstyle =[3] \color{cyan},
+    morecomment = [l][\color{gray}]{\\*},
+    morestring = [b]",
+    stringstyle = \color{red},
+}
+\lstnewenvironment{tla}{
+    \lstset{
+        language = TLA,
+        mathescape = true,
+        basicstyle = \small\ttfamily,
+        showstringspaces = false,
+        numbers = none,
+        frame = l,
+        aboveskip = .2cm,
+    }
+}{
+}
