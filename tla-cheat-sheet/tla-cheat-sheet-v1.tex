@@ -156,7 +156,7 @@
     \begin{tabular}{p{0.15\textwidth}|p{0.14\textwidth}}
       $\textbf{Nat}$, $\textbf{Int}^*$ & Sets of numbers\\
       $+$, $-^*$, $*$, $\DIV$ & Arithmetical operators\\
-      $x ^ y$ & $x$ to the $y$\\
+      $x$\texttt{\^}$y$ & $x$ to the $y$\\
       $<$, $>$, $\LEQ$, $\GEQ$ & Comparison operators\\
       $\%$ & Modulo\\
       $ x .. y $ & $\{x, x+1, ..., y\}$
@@ -176,7 +176,7 @@
       $\textbf{Print}(msg,~val)$ & Prints $msg$, then returns $val$\\
       $\textbf{Print}(msg)$ & $\textbf{Print}(msg, TRUE)$\\
       $\textbf{Assert}(val, out)$ & Prints $out$ and fails iff $val$ is $FALSE$\\
-      $d~\textbf{:>}~e$ & $f(d) = e$\\
+      $cst~\textbf{:>}~e$ & $[ x\IN ~\{cst\} ~$|->$~ e]$\\
       $f~\textbf{@@}~g$ & Union of functions\\
       $\textbf{SortSeq}(s, Op(\_,\_))$ & Sorts a sequence\\
       $\textbf{ToString}(v)$ & String representation of $v$\\
